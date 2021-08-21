@@ -7,7 +7,7 @@
     "body-parser": "^1.18.3",
     "cluster": "^0.7.7",
     "colors": "^1.4.0",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "minecraft-skin": "^0.1.2",
     "morgan": "^1.9.1",
     "ola": "^1.1.0",
@@ -19,7 +19,6 @@
     "socketio-file-upload": "^0.7.3",
     "util": "^0.12.3"
   },
-  "devDependencies": {},
   "scripts": {
     "start": "node app.js"
   },
