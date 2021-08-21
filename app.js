@@ -25,7 +25,7 @@ const spawn = require("child_process").spawn;
 let {PythonShell} = require('python-shell')
 
 // Create portf
-const serverPort = process.env.PORT || 3030;
+const serverPort = process.env.PORT || 3029;
 server.listen(serverPort, function () {
 	console.log('Started an https server on port ' + serverPort);
 })

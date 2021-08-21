@@ -1,0 +1,119 @@
+.body {
+  font-family: 'IBM Plex Sans Hebrew', sans-serif;
+  font-weight: normal;
+} 
+
+.title {
+  background-image: url('victor squatting.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.title h1{
+  position: relative;
+  font-family: 'IBM Plex Sans Hebrew', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 200%;
+  line-height: 115px;
+  text-align: center;
+  letter-spacing: -0.017em;
+
+  padding-top: 50px;
+
+  color: #000000;
+}
+
+.navigation-bar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+.navigation-bar ul li {
+  float:  left;
+}
+
+.navigation-bar ul li a{
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 30px;
+  text-decoration: none;
+}
+
+.navigation-bar ul li a:hover {
+  background-color: #111;
+}
+
+.muscle h3{
+  position: relative;
+  font-family: 'IBM Plex Sans Hebrew', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 200%;
+  line-height: 115px;
+  text-align: center;
+  letter-spacing: -0.017em;
+
+  padding-top:  50px;
+
+  color: #000000;
+}
+
+
+.muscle ul {
+  position: relative;
+  padding:0;
+  margin:0;
+  }
+
+.muscle li{
+  float: left;
+  width: calc((100% - 20px*2)/3);
+  height:auto;
+  list-style-type: none;
+  background-color: #333;
+  margin-right: 20px;
+  margin-bottom: none;
+  position: relative;
+  text-align: center;
+  border-radius: 20px;
+
+  box-shadow: 0px 0px 10px rgba(0,0,0,.5);
+  transition: transform .2s;
+}
+
+.muscle li:last-of-type{
+  margin-right: 0px;
+}
+
+.imgfilter{
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #00000060;
+  border-radius: 20px;
+}
+
+.muscle li p1{
+  color: #FFFFFF;
+  font-family: 'IBM Plex Sans Hebrew', sans-serif;
+  
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+}
+
+.muscle li:hover {
+  transform: scale(1.05);
+}
+
+.muscle li img{
+  max-width:  100%;
+}
