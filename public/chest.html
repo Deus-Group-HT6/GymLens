@@ -25,18 +25,46 @@
       <h1>You have selected: Chest</h1>
     </div>
 
+    <div class="clearfix muscle">
+            <h3>Select muscle group for workout:</h3>
+            <ul>
+              <li>
+
+                <button onclick="showVid()">
+                  <img src="favicon.png">
+                  <p1>Exercise 1</p1>
+                </button>
+              </li>
+              <li>
+                <button onclick="showVid()">
+                  <img src="favicon.png">
+                    <p1>Exercise 1</p1>
+                </button>
+              </li>
+              <li>
+                <button onclick="showVid()">
+                  <img src="favicon.png">
+                    <p1>Exercise 1</p1>
+                </button>
+              </li>
+            </ul>
+      </div>
+
+      <div id="container">
+        <video autoplay="true" id="video" style="max-width: 100%; max-height: 100%"></video>
+      </div>
 
     <div class="stopwatch">
       <span class="time" id="display">00:00:00</span>
       <div class="controls">
       <button class="buttonPlay">
-        <img id="playButton" src="play-button.png"/>
+        <img id="playButton" src="playbtn.png"/>
 
-        <img id="pauseButton" src="pause-button.png"/>
+        <img id="pauseButton" src="pausebtn.png"/>
       </button>
 
       <button class="buttonReset">
-        <img id="resetButton" src="stop-button.png"/>
+        <img id="resetButton" src="resetbtn.png"/>
       </button>
       </div>
     </div>
