@@ -20,8 +20,8 @@ const modelInfo = {
 
 let videoElement = document.getElementById('video');
 
-//brain = ml5.neuralNetwork(options);
-//brain.load(modelInfo, brainLoaded);
+brain = ml5.neuralNetwork(options);
+brain.load(modelInfo, brainLoaded);
 
 function brainLoaded() {
   console.log('pose classification ready!');
@@ -31,9 +31,29 @@ function modelLoaded() {
   console.log('poseNet ready');
 }
 
+let posesPos = [];
 
 function gotPoses(poses) {
-  /*if (poses.length > 0) {
+  if (poses.length > 0) {
+    pose = poses[0].pose;
+    posesPos = poses[0].pose.keypoints;
+    if (state == 'collecting') {
+      let inputs = [];
+      for (let i = 0; i < pose.keypoints.length; i++) {
+        let x = pose.keypoints[i].position.x;
+        let y = pose.keypoints[i].position.y;
+        inputs.push(x);
+        inputs.push(y);
+      }
+      let target = [targetLabel];
+      brain.addData(inputs, target);
+    }
+  }
+}
+
+/*
+function gotPoses(poses) {
+  if (poses.length > 0) {
     let pose = poses[0].keypoints;
     if (state == 'collecting') {
       let inputs = [];
@@ -47,8 +67,8 @@ function gotPoses(poses) {
       console.log(inputs);
       brain.addData(inputs, target);
     }
-  }*/
-}
+  }
+}*/
 
 
 
@@ -79,14 +99,19 @@ function gotResult(error, results) {
   classifyPose();
 }
 
-async function startPosing() {
+function startPosing() {
 
   // Set up detector
-  const detectorConfig = {modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER};
-  const detector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, detectorConfig);
+  /*const detectorConfig = {modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER};
+  const detector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, detectorConfig);*/
 
-  canvas.width = $("#video").innerWidth();
-  canvas.height = $("#video").innerHeight();
+
+
+  poseNet = ml5.poseNet(vid, modelLoaded);
+  poseNet.on('pose', gotPoses);
+
+  canvas.width = 1000;
+  canvas.height = canvas.width*0.75;
 
   // Count
   function countReps() {
@@ -106,20 +131,20 @@ async function startPosing() {
   // Update function
   async function update () {
 
-    let poses = await detector.estimatePoses(videoElement);
+    //let poses = []//await detector.estimatePoses(videoElement);
 
-    gotPoses(poses);
-    if (poses.length > 0){
+    /*if (posesPos.length > 0){
       pose = poses[0].keypoints;
-    }
-
-    detector.reset();
+    }*/
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-    if (!poses[0]) return;
+    //if (!poses[0]) return;
 
-    let points = poses[0].keypoints;
+    //let points = poses[0].keypoints;
+
+
+    let points = posesPos;
 
     let body = {}
 
@@ -128,13 +153,18 @@ async function startPosing() {
 
     classifyPose(points)
     // Convert points to body joints
-    for (let p of points) {
+    for (let pos of points) {
+      let p = {
+        x: pos.position.x,
+        y: pos.position.y
+      }
+
       inputs.push(p.x);
       inputs.push(p.y);
 
       p.x = (canvas.width-p.x - (canvas.width-defaultWidth)) * (canvas.width/defaultWidth);
       p.y = p.y * (canvas.height/defaultHeight)
-      body[p.name] = p;
+      body[pos.part] = p;
     }
 
     // Joints
@@ -147,36 +177,38 @@ async function startPosing() {
     	}
     }
 
+    if (!Object.keys(body).length) return;
+
     let nose = {
     	x: body["nose"].x,
     	y: body["nose"].y
     }
 
     let neck = {
-    	x: (body["left_shoulder"].x + body["right_shoulder"].x) / 2,
-    	y: (body["left_shoulder"].y + body["right_shoulder"].y) / 2
+    	x: (body["leftShoulder"].x + body["rightShoulder"].x) / 2,
+    	y: (body["leftShoulder"].y + body["rightShoulder"].y) / 2
     }
     neckArray.push(neck.y);
     //console.log(countReps());
     let dick = {
-    	x: (body["left_hip"].x + body["right_hip"].x) / 2,
-    	y: (body["left_hip"].y + body["right_hip"].y) / 2
+    	x: (body["leftHip"].x + body["rightHip"].x) / 2,
+    	y: (body["leftHip"].y + body["rightHip"].y) / 2
     }
 
     let knee = {
-    	x: (body["left_knee"].x + body["right_knee"].x) / 2,
-    	y: (body["left_knee"].y + body["right_knee"].y) / 2
+    	x: (body["leftKnee"].x + body["rightKnee"].x) / 2,
+    	y: (body["leftKnee"].y + body["rightKnee"].y) / 2
     }
 
     let foot = {
-    	x: (body["left_ankle"].x + body["right_ankle"].x) / 2,
-    	y: (body["left_ankle"].y + body["right_ankle"].y) / 2
+    	x: (body["leftAnkle"].x + body["rightAnkle"].x) / 2,
+    	y: (body["leftAnkle"].y + body["rightAnkle"].y) / 2
     }
 
     // Plank / Pushup
 
-    let xSpine = [body["left_shoulder"].x, body["left_hip"].x, body["left_knee"].x, body["left_ankle"].x];
-    let ySpine = [body["left_shoulder"].y, body["left_hip"].y, body["left_knee"].y, body["left_ankle"].y];
+    let xSpine = [body["leftShoulder"].x, body["leftHip"].x, body["leftKnee"].x, body["leftAnkle"].x];
+    let ySpine = [body["leftShoulder"].y, body["leftHip"].y, body["leftKnee"].y, body["leftAnkle"].y];
 
     r2.set(linearRegression(xSpine, ySpine)["r2"]);
 
@@ -247,28 +279,28 @@ async function startPosing() {
 
 function drawSkeleton(joints) {
   // Draw the skeleton
-  drawLine(joints["left_ear"].x, joints["left_ear"].y, joints["left_eye"].x, joints["left_eye"].y, "lime", 4)
-  drawLine(joints["left_eye"].x, joints["left_eye"].y, joints["nose"].x, joints["nose"].y, "lime", 4)
-  drawLine(joints["nose"].x, joints["nose"].y, joints["right_eye"].x, joints["right_eye"].y, "lime", 4)
-  drawLine(joints["right_eye"].x, joints["right_eye"].y, joints["right_ear"].x, joints["right_ear"].y, "lime", 4)
+  drawLine(joints["leftEar"].x, joints["leftEar"].y, joints["leftEye"].x, joints["leftEye"].y, "lime", 4)
+  drawLine(joints["leftEye"].x, joints["leftEye"].y, joints["nose"].x, joints["nose"].y, "lime", 4)
+  drawLine(joints["nose"].x, joints["nose"].y, joints["rightEye"].x, joints["rightEye"].y, "lime", 4)
+  drawLine(joints["rightEye"].x, joints["rightEye"].y, joints["rightEar"].x, joints["rightEar"].y, "lime", 4)
 
-  drawLine(joints["left_wrist"].x, joints["left_wrist"].y, joints["left_elbow"].x, joints["left_elbow"].y, "lime", 4)
-  drawLine(joints["left_elbow"].x, joints["left_elbow"].y, joints["left_shoulder"].x, joints["left_shoulder"].y, "lime", 4)
+  drawLine(joints["leftWrist"].x, joints["leftWrist"].y, joints["leftElbow"].x, joints["leftElbow"].y, "lime", 4)
+  drawLine(joints["leftElbow"].x, joints["leftElbow"].y, joints["leftShoulder"].x, joints["leftShoulder"].y, "lime", 4)
 
-  drawLine(joints["right_wrist"].x, joints["right_wrist"].y, joints["right_elbow"].x, joints["right_elbow"].y, "lime", 4)
-  drawLine(joints["right_elbow"].x, joints["right_elbow"].y, joints["right_shoulder"].x, joints["right_shoulder"].y, "lime", 4)
+  drawLine(joints["rightWrist"].x, joints["rightWrist"].y, joints["rightElbow"].x, joints["rightElbow"].y, "lime", 4)
+  drawLine(joints["rightElbow"].x, joints["rightElbow"].y, joints["rightShoulder"].x, joints["rightShoulder"].y, "lime", 4)
 
-  drawLine(joints["left_shoulder"].x, joints["left_shoulder"].y, joints["right_shoulder"].x, joints["right_shoulder"].y, "lime", 4)
-  drawLine(joints["left_hip"].x, joints["left_hip"].y, joints["right_hip"].x, joints["right_hip"].y, "lime", 4)
+  drawLine(joints["leftShoulder"].x, joints["leftShoulder"].y, joints["rightShoulder"].x, joints["rightShoulder"].y, "lime", 4)
+  drawLine(joints["leftHip"].x, joints["leftHip"].y, joints["rightHip"].x, joints["rightHip"].y, "lime", 4)
 
-  drawLine(joints["left_shoulder"].x, joints["left_shoulder"].y, joints["left_hip"].x, joints["left_hip"].y, "lime", 4)
-  drawLine(joints["right_shoulder"].x, joints["right_shoulder"].y, joints["right_hip"].x, joints["right_hip"].y, "lime", 4)
+  drawLine(joints["leftShoulder"].x, joints["leftShoulder"].y, joints["leftHip"].x, joints["leftHip"].y, "lime", 4)
+  drawLine(joints["rightShoulder"].x, joints["rightShoulder"].y, joints["rightHip"].x, joints["rightHip"].y, "lime", 4)
 
-  drawLine(joints["left_knee"].x, joints["left_knee"].y, joints["left_hip"].x, joints["left_hip"].y, "lime", 4)
-  drawLine(joints["right_knee"].x, joints["right_knee"].y, joints["right_hip"].x, joints["right_hip"].y, "lime", 4)
+  drawLine(joints["leftKnee"].x, joints["leftKnee"].y, joints["leftHip"].x, joints["leftHip"].y, "lime", 4)
+  drawLine(joints["rightKnee"].x, joints["rightKnee"].y, joints["rightHip"].x, joints["rightHip"].y, "lime", 4)
 
-  drawLine(joints["left_knee"].x, joints["left_knee"].y, joints["left_ankle"].x, joints["left_ankle"].y, "lime", 4)
-  drawLine(joints["right_knee"].x, joints["right_knee"].y, joints["right_ankle"].x, joints["right_ankle"].y, "lime", 4)
+  drawLine(joints["leftKnee"].x, joints["leftKnee"].y, joints["leftAnkle"].x, joints["leftAnkle"].y, "lime", 4)
+  drawLine(joints["rightKnee"].x, joints["rightKnee"].y, joints["rightAnkle"].x, joints["rightAnkle"].y, "lime", 4)
 }
 
 setTimeout(function () {

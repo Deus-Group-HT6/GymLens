@@ -25,6 +25,7 @@ video {
   height: 100vh;
   vertical-align: middle;
   text-align: center;
+  top:-10%;
 }
 
 .title {
@@ -33,7 +34,6 @@ video {
 }
 
 .title h1{
-
   font-family: 'IBM Plex Sans Hebrew', sans-serif;
   font-style: normal;
   font-weight: normal;
@@ -55,7 +55,7 @@ video {
 }
 
 .title h2{
-  font-family: 'IBM Plex Sans Hebrew', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: normal;
   font-size: 150%;
   line-height: 115px;
@@ -76,6 +76,7 @@ video {
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 16px;
+
 }
 
 .button a{
@@ -137,6 +138,8 @@ video {
   }
 
 .muscle li{
+  color: #000000;
+  font-family: 'Space Grotesk', sans-serif;
   float: left;
   width: calc((100% - 20px*2)/3);
   height:auto;
@@ -164,9 +167,6 @@ video {
 }
 
 .muscle li p1{
-  color: #FFFFFF;
-  font-family: 'IBM Plex Sans Hebrew', sans-serif;
-  
   position: absolute;
   top: 50%;
   left: 50%;

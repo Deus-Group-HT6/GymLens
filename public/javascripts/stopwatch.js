@@ -60,7 +60,7 @@ function reset() {
 function showButton(buttonKey) {
   const buttonToShow = buttonKey === "PLAY" ? playButton : pauseButton;
   const buttonToHide = buttonKey === "PLAY" ? pauseButton : playButton;
-  buttonToShow.style.display = "block";
+  buttonToShow.style.display = "inline-block";
   buttonToHide.style.display = "none";
 }
 // Create event listeners

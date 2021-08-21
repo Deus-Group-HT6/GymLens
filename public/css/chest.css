@@ -134,21 +134,35 @@
   text-align: center;
   display: none;
 }
+
 .stopwatch{
   padding-top: 20px;
   text-align: center;
+
+  font-family: 'IBM Plex Sans Hebrew', sans-serif;
+  font-size: 150%;
 }
 
-.buttonPlay {
-  display:  inline-block;
+.playButton {
+  display: inline-block;
+  padding: 0;
+  margin:  0;
+  
+  background: none;
 }
 
 #pauseButton {
   display: none;
+  padding: 0;
+  margin:  0;
+  background: none;
 }
 
-.buttonReset {
-
+.resetButton {
+  display: inline-block;
+  padding: 0;
+  margin:  0;
+  background: none;
 }
 
 .stopwatch button {
