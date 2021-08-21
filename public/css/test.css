@@ -1,2 +1,23 @@
+h1{
+  position: absolute;
+  width: 370px;
+  height:96px;
+  left: 700px;
+  top: 300px;
+
+  font-family: Hind;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 300px;
+  line-height: 115px;
+  text-align: center;
+  letter-spacing: -0.017em;
+
+  color: #000000;
+}
+
 .space {
-  background-coloblur: r: r: }
+  background-color: blue;
+  height: 100px;
+  width: 100%;
+}
