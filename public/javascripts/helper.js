@@ -44,6 +44,27 @@ function drawLine(x1, y1, x2, y2, color, thickness, cap, alpha) {
 	ctx.closePath();
 }
 
+function drawRectangle(x, y, w, h, c, options) {
+
+	if (!options)
+		options = {};
+
+	ctx.save();
+	ctx.translate(x, y);
+	ctx.beginPath();
+	ctx.rect(0, 0, w, h);
+	ctx.fillStyle = c || 'black';
+	ctx.globalAlpha = options.alpha || 1;
+	if (options.fill == undefined || options.fill)
+		ctx.fill();
+	ctx.strokeStyle = options.outlineColor || "black";
+	ctx.lineWidth = options.outlineWidth || 1;
+	if (options.outline)
+		ctx.stroke();
+	ctx.closePath();
+	ctx.restore();
+}
+
 function drawText(text, x, y, font, color, align, baseline, alpha) {
 
 	let options = {};

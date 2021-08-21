@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
    <head>
-      <title>ArmsLens</title>
+      <title>LegsLens</title>
       <meta charset="utf-8">
     	<meta name="viewport" content="width=device-width, initial-scale=1">
       <link rel="stylesheet" href="css/legs.css">
@@ -29,36 +29,64 @@
             <h3>Select muscle group for workout:</h3>
             <ul>
               <li>
-                <a href="legs.html">
+
+                <button onclick="showVid()">
                   <img src="favicon.png">
-                  <div class="imgfilter">
+                  <p1>Exercise 1</p1>
+                </button>
+              </li>
+              <li>
+                <button onclick="showVid()">
+                  <img src="favicon.png">
                     <p1>Exercise 1</p1>
-                  </div>
-                </a>
+                </button>
               </li>
               <li>
-                <a href="chest.html">
+                <button onclick="showVid()">
                   <img src="favicon.png">
-                  <div class="imgfilter">
-                    <p1>Exercise 2</p1>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="arms.html">
-                  <img src="favicon.png">
-                  <div class="imgfilter">
-                    <p1>Exercise 3</p1>
-                  </div>
-                </a>
+                    <p1>Exercise 1</p1>
+                </button>
               </li>
             </ul>
       </div>
 
+      <div id="container">
+        <video autoplay="true" id="video" style="max-width: 100%; max-height: 100%"></video>
+      </div>
 
-      <!-- Load Resources -->
+
+      <div class="stopwatch">
+        <span class="time" id="display">00:00:00</span>
+        <div class="controls">
+        <button class="buttonPlay">
+          <img id="playButton" src="play-button.png"/>
+          <img id="pauseButton" src="pause-button.png"/>
+        </button>
+
+        <button class="buttonReset">
+          <img id="resetButton" src="stop-button.png"/>
+        </button>
+        </div> 
+      </div>
+ 
+
+
+
+     <!-- Load Resources -->
+      <script src="javascripts/stopwatch.js"></script>
+
       <script src="javascripts/jquery.js"></script>
 
+      <script>
+        function showVid() {
+          var x = document.getElementById("container");
+          if (x.style.display === "none") {
+            x.style.display = "block";
+          } else {
+            x.style.display = "none";
+          }
+        }
+      </script>
 
 
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core/dist/tf-core.min.js"></script>
@@ -66,9 +94,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl/dist/tf-backend-webgl.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection/dist/pose-detection.min.js"></script>
 
-<div id="container">
-  <video autoplay="true" id="video" style="position: absolute; top: 800px; left: 0px"></video>
-</div>
+
+
 
 <script>
 </script>

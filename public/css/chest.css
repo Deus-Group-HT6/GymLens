@@ -47,3 +47,11 @@
 .navigation-bar ul li a:hover {
   background-color: #111;
 }
+
+#playButton {
+  display: block;
+}
+
+#pauseButton {
+  display: none;
+}

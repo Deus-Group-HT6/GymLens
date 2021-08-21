@@ -37,73 +37,19 @@ app.use('/*', function (req, res, next) {
 	next()
 })
 
-let Files = {}
+
+var scipy = require('scipy');
+
+console.log(scipy)
 
 // Server-client connection architecture
 io.on('connection', function(socket) {
 	console.log("Connection made", new Date())
 
-	var uploader = new siofu();
-    uploader.dir = "./public/temp";
-    uploader.listen(socket);
 
-    uploader.on('complete', function (event) {
 
-    	let studentName = event.file.name.split('.').slice(0, -1).join('.');
-
-    	console.log("Uploaded:", event.file.name)
-
-    	let options = {
-		  mode: 'text',
-		  pythonOptions: ['-u'], // get print results in real-time
-		  args: [event.file.name, studentName]
-		};
-
-		PythonShell.run('./python/main.py', options, function (err, results) {
-		  if (err) throw err;
-		  // results is an array consisting of messages collected during execution
-		  console.log("Completed image processing");
-
-		  fs.unlink(__dirname + '/public/temp/' + event.file.name, function (err) {
-		  	if (err) {
-		  		console.log("Unable to delete file");
-		  	}
-		  })
-
-		  fs.readdir(__dirname + '/public/questions/' + studentName, (err, files) => {
-				if (err) {
-					console.log("Error finding questions")
-				} else {
-					var oFiles = [];
-					for (var i = 0; i < files.length; i++)
-						oFiles.push(files[i])
-					socket.emit('files', {
-						files: oFiles,
-						name: studentName
-					})
-				}
-			})
-		});
-
-    })
 
     socket.on('sampleTests', function () {
-    	let studentNames = ['Alex Deng', 'Victor Wei', 'Ibrahim Ahmed']
-    	for (let studentName of studentNames) {
-    		fs.readdir(__dirname + '/public/questions/' + studentName, (err, files) => {
-				if (err) {
-					console.log("Error finding questions")
-				} else {
-					var oFiles = [];
-					for (var i = 0; i < files.length; i++)
-						oFiles.push(files[i])
-					socket.emit('files', {
-						files: oFiles,
-						name: studentName
-					})
-				}
-			})
-    	}
 
     })
 
