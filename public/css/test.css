@@ -4,9 +4,9 @@ video {
 }
 
 .site-container {
-  max-width: 920px;
-  padding-bottom: 20px;
+  padding-bottom: 300px;
   margin: 0 auto;
+  max-width: 75%;
 }
 
 .clearfix:before, .clearfix:after { content: ""; display: table; }
@@ -25,7 +25,6 @@ video {
   height: 100vh;
   vertical-align: middle;
   text-align: center;
-  top:-10%;
 }
 
 .title {
@@ -65,6 +64,27 @@ video {
   padding-top: 0px;
 
   color: #000000;
+}
+
+.logo h4{
+  font-family: 'IBM Plex Sans Hebrew', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 170%;
+  color: #FFFFFF;
+
+  position: absolute;
+  top: 8px;
+  right: 10px;
+}
+
+.logo a{
+  text-decoration: none;
+  color: white;
+}
+
+.logo a:hover{
+  color: white;
 }
 
 .button{
@@ -125,10 +145,26 @@ video {
   text-align: center;
   padding: 14px 30px;
   text-decoration: none;
+  color: #FFFFFF;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .navigation-bar ul li a:hover {
   background-color: #111;
+}
+
+.navigation-bar ul li:last-of-type {
+  float: right;
+}
+
+.navigation-bar ul li:last-of-type a {
+  padding: 0;
+}
+
+.muscle {
+  position: relative;
+  vertical-align: middle;
+  text-align: center;
 }
 
 .muscle ul {
@@ -140,11 +176,11 @@ video {
 .muscle li{
   color: #000000;
   font-family: 'Space Grotesk', sans-serif;
+
   float: left;
   width: calc((100% - 20px*2)/3);
-  height:auto;
+  height: auto;
   list-style-type: none;
-  background-color: #333;
   margin-right: 20px;
   margin-bottom: none;
   position: relative;
@@ -171,7 +207,9 @@ video {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
+  color: #FFFFFF;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 150%;
 }
 
 .muscle li:hover {
@@ -180,4 +218,22 @@ video {
 
 .muscle li img{
   max-width:  100%;
+  max-height: calc((100vw - 20px*2)/3)
 }
+
+
+/*.demo-video {
+  padding: 20px;
+  margin-top: 30px;
+  width:  100%;
+  height:  20%;
+  text-align: center;
+  border: 1px solid black;
+}*/
+
+.site-footer {
+  width: 100%;
+  height: 20px;
+  background-color: #333;
+}
+

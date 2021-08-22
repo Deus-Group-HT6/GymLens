@@ -1,0 +1,68 @@
+.button {
+  padding: 0;
+  margin: 0;
+}
+
+.body {
+  font-family: 'IBM Plex Sans Hebrew', sans-serif;
+  font-weight: normal;
+} 
+
+.title {
+  background-image: url('victor squatting.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.title h1{
+  position: relative;
+  font-family: 'IBM Plex Sans Hebrew', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 200%;
+  line-height: 115px;
+  text-align: center;
+  letter-spacing: -0.017em;
+
+  padding-top: 50px;
+
+  color: #000000;
+}
+
+.logo h4{
+  font-family: 'IBM Plex Sans Hebrew', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 170%;
+  color: #FFFFFF;
+
+  position: absolute;
+  top: 8px;
+  right: 10px;
+}
+
+.navigation-bar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+.navigation-bar ul li {
+  float:  left;
+}
+
+.navigation-bar ul li a{
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 30px;
+  text-decoration: none;
+  color: #FFFFFF;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.navigation-bar ul li a:hover {
+  background-color: #111;
+}
