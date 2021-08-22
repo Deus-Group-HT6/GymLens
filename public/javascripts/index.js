@@ -3,31 +3,56 @@ const defaultHeight = 480;
 
 let nn = new NeuralNetwork(34, 64, 2);
 
+let jsonFile = "";
+
+if (location.pathname.includes("legs")) {
+  jsonFile = "squats.json";
+} else if (location.pathname.includes("chest")) {
+  jsonFile = "benchpress.json";
+} else if (location.pathname.includes("arms")) {
+  jsonFile = "pushups.json";
+} else {
+  jsonFile = "jumpingjacks.json";
+}
+
+console.log(jsonFile);
+
+// LOAD NEURAL NETWORK
+
+$.getJSON("../models/" + jsonFile, function(json) {
+  nn = NeuralNetwork.deserialize(json)
+});
+
+let training = false;
 let state = 'waiting';
 
 setTimeout(function () {
-	function update(stream) {
-	  document.querySelector('video').src = stream.url;
-	}
+  function update(stream) {
+    document.querySelector('video').src = stream.url;
+  }
 
-	if (navigator.mediaDevices.getUserMedia) {
-	navigator.mediaDevices.getUserMedia({ video: true })
-	  .then(function (stream) {
-	    video.srcObject = stream;
-	    startPosing();
-	  })
-	  .catch(function (err0r) {
-	    console.log("Something went wrong!");
-	  });
-	}
+  if (navigator.mediaDevices.getUserMedia) {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(function (stream) {
+      video.srcObject = stream;
+      startPosing();
+    })
+    .catch(function (err0r) {
+      console.log("Something went wrong!");
+    });
+  }
 }, 1000)
 
 let currPoseData = [];
 let poseData = [];
 let firstPose, secondPose;
 
-async function startPosing() {
+let counter = 0;
+let lastPose = undefined;
+let lastRep = Date.now();
+let halfRep = false;
 
+function startTraining() {
   console.log("Get ready for posing in 5 seconds")
   setTimeout(function () {
     poseData = [];
@@ -76,6 +101,12 @@ async function startPosing() {
 
             console.log("Done Training");
 
+            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(nn.serialize());
+            var dlAnchorElem = document.getElementById('downloadAnchorElem');
+            dlAnchorElem.setAttribute("href",     dataStr     );
+            dlAnchorElem.setAttribute("download", "scene.json");
+            dlAnchorElem.click();
+
           }, 10000)
 
         }, 5000)
@@ -83,15 +114,13 @@ async function startPosing() {
     }, 10000)
 
   }, 5000)
+}
 
+async function startPosing() {
 
-
-  /*for (let i = 0; i < 500; i++) {
-    for (let data of poseData) {
-      let input = data;
-      nn.train(input, target)
-    }
-  }*/
+  if (training) {
+    startTraining();
+  }
 
   const detectorConfig = {modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER};
   const detector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, detectorConfig);
@@ -107,7 +136,6 @@ async function startPosing() {
     let filteredY = [...Array(lag + 1).keys()];
     let avgFilter = null;
     let stdFilter = null;
-
   }*/
 
   let r2 = Ola(0);
@@ -116,7 +144,7 @@ async function startPosing() {
   // Update function
   async function update () {
 
-  	let videoElement = document.getElementById('video');
+    let videoElement = document.getElementById('video');
     let poses = await detector.estimatePoses(videoElement);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -143,45 +171,60 @@ async function startPosing() {
 
     // Joints
     for (let id of Object.keys(body)) {
-    	if (joints[id]) {
-    		joints[id].x = body[id].x;
-    		joints[id].y = body[id].y;
-    	} else {
-    		joints[id] = Ola({x: body[id].x, y: body[id].y}, 50);
-    	}
+      if (joints[id]) {
+        joints[id].x = body[id].x;
+        joints[id].y = body[id].y;
+      } else {
+        joints[id] = Ola({x: body[id].x, y: body[id].y}, 50);
+      }
     }
 
     // Feedforward
 
     let result = nn.feedForward(currPoseData);
-    drawText("PREDICTED POSE: " + result.indexOf(Math.max(...result)), 100, 200, "50px Arial", "lime", "left");
+    let poseIndex = result.indexOf(Math.max(...result))
 
-    // SKELETON
+    if (lastPose != poseIndex && Date.now()-lastRep > 400) {
+      halfRep = !halfRep;
+
+      if (!halfRep)
+        counter++;
+
+      lastRep = Date.now();
+    }
+
+
+    lastPose = poseIndex;
+
+    drawText("Predicted Pose: " + poseIndex, 20, 50, "20px Arial", "red", "left", "top");
+    drawText("# of Reps: " + counter, 20, 80, "20px Arial", "red", "left", "top");
+
+  // SKELETON
 
     let nose = {
-    	x: body["nose"].x,
-    	y: body["nose"].y
+      x: body["nose"].x,
+      y: body["nose"].y
     }
 
     let neck = {
-    	x: (body["left_shoulder"].x + body["right_shoulder"].x) / 2,
-    	y: (body["left_shoulder"].y + body["right_shoulder"].y) / 2
+      x: (body["left_shoulder"].x + body["right_shoulder"].x) / 2,
+      y: (body["left_shoulder"].y + body["right_shoulder"].y) / 2
     }
     neckArray.push(neck.y);
 
     let dick = {
-    	x: (body["left_hip"].x + body["right_hip"].x) / 2,
-    	y: (body["left_hip"].y + body["right_hip"].y) / 2
+      x: (body["left_hip"].x + body["right_hip"].x) / 2,
+      y: (body["left_hip"].y + body["right_hip"].y) / 2
     }
 
     let knee = {
-    	x: (body["left_knee"].x + body["right_knee"].x) / 2,
-    	y: (body["left_knee"].y + body["right_knee"].y) / 2
+      x: (body["left_knee"].x + body["right_knee"].x) / 2,
+      y: (body["left_knee"].y + body["right_knee"].y) / 2
     }
 
     let foot = {
-    	x: (body["left_ankle"].x + body["right_ankle"].x) / 2,
-    	y: (body["left_ankle"].y + body["right_ankle"].y) / 2
+      x: (body["left_ankle"].x + body["right_ankle"].x) / 2,
+      y: (body["left_ankle"].y + body["right_ankle"].y) / 2
     }
 
     // Plank / Pushup
@@ -191,23 +234,24 @@ async function startPosing() {
 
     r2.set(linearRegression(xSpine, ySpine)["r2"]);
 
-    drawRectangle(0, 0, r2.value*canvas.width, 50, "green");
+    //drawRectangle(0, 0, r2.value*canvas.width, 50, "green");
 
-    drawText("R2 value: " + r2.value.toFixed(2), 20, 80)
+    drawText("R2 value: " + r2.value.toFixed(2), 20, 20, "20px Arial", "red", "left", "top")
 
     let text, color;
     if (r2.value > 0.7) {
-    	text = "Good Posture";
-    	color = "green";
-    } else if (r2.value > 0.2) {
-    	text = "Straighten Your Back";
-    	color = "orange";
+      text = "Good Posture";
+      color = "green";
+    } else if (r2.value > 0.5) {
+      text = "Straighten Your Back";
+      color = "orange";
     } else {
-    	text = "WTF ARE YOU DOING";
-    	color = "red";
+      text = "Incorrect Posture";
+      color = "red";
     }
 
-    drawText(text, canvas.width/2, canvas.height/2, "100px Arial", color, "center", "middle")
+    if (location.pathname.includes("arms"))
+      drawText(text, canvas.width/2, canvas.height/2, "80px Arial", color, "center", "middle")
 
     // Draw the skeleton
     drawLine(joints["left_ear"].x, joints["left_ear"].y, joints["left_eye"].x, joints["left_eye"].y, "lime", 4)
