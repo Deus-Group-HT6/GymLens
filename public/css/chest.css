@@ -29,6 +29,18 @@
   color: #000000;
 }
 
+.logo h4{
+  font-family: 'IBM Plex Sans Hebrew', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 170%;
+  color: #FFFFFF;
+
+  position: absolute;
+  top: 8px;
+  right: 10px;
+}
+
 .navigation-bar ul {
   list-style-type: none;
   margin: 0;
@@ -47,6 +59,8 @@
   text-align: center;
   padding: 14px 30px;
   text-decoration: none;
+  color: #FFFFFF;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .navigation-bar ul li a:hover {
@@ -134,21 +148,43 @@
   text-align: center;
   display: none;
 }
+
 .stopwatch{
   padding-top: 20px;
   text-align: center;
+
+  font-family: 'IBM Plex Sans Hebrew', sans-serif;
+  font-size: 150%;
 }
 
-.buttonPlay {
-  display:  inline-block;
+.time{
+  padding-top: 20px;
+}
+
+.controls{
+    cursor: pointer;
+}
+
+.playButton {
+  display: inline-block;
+  padding: 0;
+  margin:  0;
+  
+  background: none;
 }
 
 #pauseButton {
   display: none;
+  padding: 0;
+  margin:  0;
+  background: none;
 }
 
-.buttonReset {
-
+.resetButton {
+  display: inline-block;
+  padding: 0;
+  margin:  0;
+  background: none;
 }
 
 .stopwatch button {
